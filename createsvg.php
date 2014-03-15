@@ -11,7 +11,7 @@
 	// Connect to server and select databse.
 	$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
 	
-	$queryToUse="SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, TopicID FROM meng_rcuk.vw_hw_grants, meng_rcuk.topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
+	$queryToUse="SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
 	
 	$query = $db->prepare($queryToUse);
 	$query->bindValue(":topicID", $_GET['topicID']);
@@ -20,7 +20,7 @@
 	$result = $query->fetchAll();
 	
 	if (count($result) > 0) {
-		$queryToUse2="SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, max(EndDate), TopicID FROM meng_rcuk.vw_hw_grants, meng_rcuk.topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID;";
+		$queryToUse2="SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID;";
 		
 		$query2 = $db->prepare($queryToUse2);
 		$query2->bindValue(":topicID", $_GET['topicID']);
@@ -30,9 +30,8 @@
 		
 		if (count($result2) == 1)
 		{
-			$row1 = $result[0];
-			$beginDate = $row1['StartDate'];
 			$row2 = $result2[0];
+			$beginDate = $row2['min(StartDate)'];
 			$lastDate = $row2['max(EndDate)'];
 			
 			$date1 = DateTime::createFromFormat("Y-m-d H:i:s", $beginDate);
@@ -45,11 +44,12 @@
 			$m2 = $date2->format("m");
 			
 			$totalNumMonth = ($y2-$y1)*12+($m2-$m1)+1;
-			$outputString = array('date');
-			
-			for ($i = 1; $i <= count($result); $i++) {
-				$outputString[0] .= "\t".$i;
-			}
+			//$outputString = array('date');
+			$outputString = array(array("date", "AvgMonthlyFunding"));
+
+			//for ($i = 1; $i <= count($result); $i++) {
+				//$outputString[0] .= "\t".$i;
+			//}
 			
 			$y = $y1;
 			$m = $m1;
@@ -59,10 +59,11 @@
 					$m = "0".$m;
 				}
 				
-				$outputString[$i] = "$y$m";
+				$outputString[$i][0] = "$y$m";
+				$outputString[$i][1] = 0;
 				$totalAvgMonthlyFunding[$i] = 0;
 				$m++;
-					
+				
 				if ($m > 12) {
 					$y++;
 					$m = 1;
@@ -93,39 +94,37 @@
 				$index = 1;
 				
 				for ($i = 1; $i <= $numMonthAfterBeginDate; $i++) {
-					$outputString[$index] .= "\t0";
+					//$outputString[$index] .= "\t0";
 					$index++;
 				}
 				for ($i = 1; $i <= $numMonth; $i++) {
-					$outputString[$index] .= "\t".round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
+					//$outputString[$index] .= "\t".round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
+					$outputString[$index][1] += round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
 					$totalAvgMonthlyFunding[$index] += round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
 					$index++;
 				}
 				for ($i = 1; $i <= $numMonthBeforeLastDate; $i++) {
-					$outputString[$index] .= "\t0";
+					//$outputString[$index] .= "\t0";
 					$index++;
 				}
 			}
 			
 			for ($i = 0; $i <= $totalNumMonth; $i++) {
-				$print_func($outputString[$i]);
-				$print_func("\n");
+				$print_func($outputString[$i][0]."\t".$outputString[$i][1]."\n");
 			}
 			
 			$highestFundingOfOneMonth = max($totalAvgMonthlyFunding);
 			$digit = strlen(round($highestFundingOfOneMonth, 0, PHP_ROUND_HALF_DOWN));
-				$res = "1";
-				$firstNum = substr($highestFundingOfOneMonth, 0, 1);
-				if ($firstNum <= 8) {
-					$res = ++$firstNum;
-					$digit--;
-				}
-				
-				for ($i = 1; $i <= $digit; $i++){
-					$res = $res."0";
-				}
-				$_SESSION['MonthlyFunding'] = $res;
-			
+			$res = "1";
+			$firstNum = substr($highestFundingOfOneMonth, 0, 1);
+			if ($firstNum <= 8) {
+				$res = ++$firstNum;
+				$digit--;
+			}
+			for ($i = 1; $i <= $digit; $i++){
+				$res = $res."0";
+			}
+			$_SESSION['MonthlyFunding'] = $res;
 		}
 	}
 };

@@ -11,7 +11,7 @@ require_once("config.inc.php");
 	// Connect to server and select databse.
 	$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
 	
-	$queryToUse="SELECT TopicID, sum(LifeSciences), sum(EngineeringAndPhysical), sum(BuiltEnvironment), sum(ManagementAndLanguages), sum(Petroleum), sum(Macs), sum(TechRes), sum(Textiles), sum(Other) FROM meng_rcuk.vw_hw_totalspendbyschool where TopicID = :topicID;";
+	$queryToUse="SELECT TopicID, sum(LifeSciences), sum(EngineeringAndPhysical), sum(BuiltEnvironment), sum(ManagementAndLanguages), sum(Petroleum), sum(Macs), sum(TechRes), sum(Textiles), sum(Other) FROM vw_hw_totalspendbyschool where TopicID = :topicID;";
 	
 	$query = $db->prepare($queryToUse);
 	$query->bindValue(":topicID", $_GET['topicID']);
@@ -43,7 +43,7 @@ require_once("config.inc.php");
 
 	// Connect to server and select databse.
 	$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
-	$queryToUse="SELECT TopicID, TopicWord FROM meng_rcuk.topicwords_100 where topicID = :topicID;";
+	$queryToUse="SELECT TopicID, TopicWord FROM topicwords_100 where topicID = :topicID;";
 	
 	$query = $db->prepare($queryToUse);
 	$query->bindValue(":topicID", $_GET['topicID']);
@@ -92,10 +92,44 @@ body {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript" src="D3/d3.layout.cloud.js"></script>
 <script>
+  var fill = d3.scale.category20();
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 700 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+  d3.layout.cloud().size([960, 350])
+      .words([
+        <?php echo $topicWords; ?>].map(function(d) {
+       // return {text: d, size: 1 + Math.random() * 50};
+     return {text: d, size: 40};
+      }))
+      .padding(2)
+      .rotate(0)
+      .font("Helvetica")
+      .fontSize(function(d) { return d.size; })
+      .on("end", draw)
+      .start();
+
+  function draw(words) {
+    d3.select("body").append("svg")
+        .attr("width", 960)
+        .attr("height", 350)
+      .append("g")
+        .attr("transform", "translate(500,170)")
+      .selectAll("text")
+        .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Helvetica")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x,d.y] + ")";
+        })
+        .text(function(d) { return d.text; });
+  }
+</script>
+<script>
+var margin = {top: 40, right: 40, bottom: 100, left: 70},
+    width = 960 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
 
 var x0 = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
@@ -185,41 +219,6 @@ d3.csv("spendpertopicperschool.csv", function(error, data) {
 
 });
 
-</script>
-<script>
-  var fill = d3.scale.category20();
-
-  d3.layout.cloud().size([600, 600])
-      .words([
-        <?php echo $topicWords; ?>].map(function(d) {
-       // return {text: d, size: 1 + Math.random() * 50};
-     return {text: d, size: 40};
-      }))
-      .padding(2)
-      .rotate(0)
-      .font("Helvetica")
-      .fontSize(function(d) { return d.size; })
-      .on("end", draw)
-      .start();
-
-  function draw(words) {
-    d3.select("body").append("svg")
-        .attr("width", 600)
-        .attr("height", 600)
-      .append("g")
-        .attr("transform", "translate(250,250)")
-      .selectAll("text")
-        .data(words)
-      .enter().append("text")
-        .style("font-size", function(d) { return d.size + "px"; })
-        .style("font-family", "Helvetica")
-        .style("fill", function(d, i) { return fill(i); })
-        .attr("text-anchor", "middle")
-        .attr("transform", function(d) {
-          return "translate(" + [d.x,d.y] + ")";
-        })
-        .text(function(d) { return d.text; });
-  }
 </script>
 <?php
 	include_once("show.php");

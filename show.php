@@ -41,9 +41,9 @@ Sorry, your browser does not support inline SVG.
 
 
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
-    width = 700 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var margin = {top: 40, right: 40, bottom: 100, left: 70},
+    width = 960 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y%m").parse;
 
