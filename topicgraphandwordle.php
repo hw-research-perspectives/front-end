@@ -1,63 +1,47 @@
 <?php
 require_once("config.inc.php");
-	
-	$main = function($print_func) {
-	
-	global $dbhost;
-	global $dbname;
-	global $dbuser;
-	global $dbpass;
 
-	// Connect to server and select databse.
-	$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
+// override this here, yhyh about the config file, but it seems the wordle needs meng_project and this needs meng_rcuk?
+$dbname = "meng_rcuk";
 	
-	$queryToUse="SELECT TopicID, sum(LifeSciences), sum(EngineeringAndPhysical), sum(BuiltEnvironment), sum(ManagementAndLanguages), sum(Petroleum), sum(Macs), sum(TechRes), sum(Textiles), sum(Other) FROM vw_hw_totalspendbyschool where TopicID = :topicID;";
-	
-	$query = $db->prepare($queryToUse);
-	$query->bindValue(":topicID", $_GET['topicID']);
-	$query->execute();
-	
-	$result = $query->fetchAll();
-	
-	if (count($result) == 1) {
-	
-		$print_func('"TopicId","Sch of Life Sciences","Sch of Engineering and Physical Science","Sch of the Built Environment","Sch of Management and Languages","Institute Of Petroleum Engineering","S of Mathematical and Computer Sciences","Technology and Research Services","Sch of Textiles and Design","Other"');
-		$print_func("\n");
-		
-		$row = $result[0];
-		
-		$outputString = $row['TopicID'].",".$row['sum(LifeSciences)'].",".$row['sum(EngineeringAndPhysical)'].",".$row['sum(BuiltEnvironment)'].",".$row['sum(ManagementAndLanguages)'].",".$row['sum(Petroleum)'].",".$row['sum(Macs)'].",".$row['sum(TechRes)'].",".$row['sum(Textiles)'].",".$row['sum(Other)'];
-		
-		$print_func($outputString);
-	}
-};
 $f = fopen("spendpertopicperschool.csv", "wb");
-$main(function($output) use ($f) {
-    fwrite($f, $output);
-    //echo $output;
-});
+
+// Connect to server and select databse.
+$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
+	
+$queryToUse="SELECT TopicID, sum(LifeSciences), sum(EngineeringAndPhysical), sum(BuiltEnvironment), sum(ManagementAndLanguages), sum(Petroleum), sum(Macs), sum(TechRes), sum(Textiles), sum(Other) FROM vw_hw_totalspendbyschool where TopicID = :topicID;";
+	
+$query = $db->prepare($queryToUse);
+$query->execute(array(":topicID" => $_GET['topicID']));
+	
+$result = $query->fetchAll();
+	
+if (count($result) == 1) {
+	
+	fwrite($f, '"TopicId","Sch of Life Sciences","Sch of Engineering and Physical Science","Sch of the Built Environment","Sch of Management and Languages","Institute Of Petroleum Engineering","S of Mathematical and Computer Sciences","Technology and Research Services","Sch of Textiles and Design","Other"');
+	fwrite($f, "\n");
+		
+	$row = $result[0];
+		
+	$outputString = $row['TopicID'].",".$row['sum(LifeSciences)'].",".$row['sum(EngineeringAndPhysical)'].",".$row['sum(BuiltEnvironment)'].",".$row['sum(ManagementAndLanguages)'].",".$row['sum(Petroleum)'].",".$row['sum(Macs)'].",".$row['sum(TechRes)'].",".$row['sum(Textiles)'].",".$row['sum(Other)'];
+		
+	fwrite($f, $outputString);
+}
+
 fclose($f);
 
-require_once("config.inc.php");
+$query = $db->prepare("SELECT TopicID, TopicWord FROM topicwords_100 where topicID = :topicID;");
+$query->execute(array(":topicID" => $_GET['topicID']));
 	
-
-	// Connect to server and select databse.
-	$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
-	$queryToUse="SELECT TopicID, TopicWord FROM topicwords_100 where topicID = :topicID;";
+$result = $query->fetchAll();
+$topicWords = "";
 	
-	$query = $db->prepare($queryToUse);
-	$query->bindValue(":topicID", $_GET['topicID']);
-	$query->execute();
-	
-	$result = $query->fetchAll();
-	$topicWords = "";
-	
-	if (count($result) > 0) {
-		foreach ($result as $row) {
-			$topicWords .= '"'.$row['TopicWord'].'",';
-		}
-		$topicWords = substr($topicWords, 0, strlen($topicWords)-1);
+if (count($result) > 0) {
+	foreach ($result as $row) {
+		$topicWords .= '"'.$row['TopicWord'].'",';
 	}
+	$topicWords = substr($topicWords, 0, strlen($topicWords)-1);
+}
 
 ?>
 <!DOCTYPE html>
