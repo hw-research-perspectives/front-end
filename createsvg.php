@@ -11,7 +11,7 @@
 	// Connect to server and select databse.
 	$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
 	
-	$queryToUse="SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
+	$queryToUse="SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, OrganisationDepartment, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
 	
 	$query = $db->prepare($queryToUse);
 	$query->bindValue(":topicID", $_GET['topicID']);
@@ -44,13 +44,10 @@
 			$m2 = $date2->format("m");
 			
 			$totalNumMonth = ($y2-$y1)*12+($m2-$m1)+1;
-			//$outputString = array('date');
-			$outputString = array(array("date", "AvgMonthlyFunding"));
+			$totalNumMonth += 12;
+			$outputArray = array(array('date', 'Sch of Life Sciences', 'Sch of Engineering and Physical Science', 'Sch of the Built Environment', 'Sch of Management and Languages', 'Institute Of Petroleum Engineering', 'S of Mathematical and Computer Sciences', 'Technology and Research Services', 'Sch of Textiles and Design', 'Other'));
+			//$outputArray = array(array("date", "AvgMonthlyFunding"));
 
-			//for ($i = 1; $i <= count($result); $i++) {
-				//$outputString[0] .= "\t".$i;
-			//}
-			
 			$y = $y1;
 			$m = $m1;
 			
@@ -59,14 +56,19 @@
 					$m = "0".$m;
 				}
 				
-				$outputString[$i][0] = "$y$m";
-				$outputString[$i][1] = 0;
+				$outputArray[$i][0] = "$y$m";
 				$totalAvgMonthlyFunding[$i] = 0;
 				$m++;
 				
 				if ($m > 12) {
 					$y++;
 					$m = 1;
+				}
+			}
+			
+			for ($i = 1; $i <= 9; $i++) {
+				for ($j = 1; $j <= $totalNumMonth; $j++) {
+					$outputArray[$j][$i] = 0;
 				}
 			}
 			
@@ -92,27 +94,55 @@
 				$avgMonthlyFunding = $totalgrantvalue/$numMonth;
 				
 				$index = 1;
+				$school = 0;
 				
+				if ($row['OrganisationDepartment'] == "Sch of Life Sciences") {
+					$school = 1;
+				}
+				else if ($row['OrganisationDepartment'] == "Sch of Engineering and Physical Science") {
+					$school = 2;
+				}
+				else if ($row['OrganisationDepartment'] == "Sch of the Built Environment") {
+					$school = 3;
+				}else if ($row['OrganisationDepartment'] == "Sch of Management and Languages") {
+					$school = 4;
+				}else if ($row['OrganisationDepartment'] == "Institute Of Petroleum Engineering") {
+					$school = 5;
+				}else if ($row['OrganisationDepartment'] == "S of Mathematical and Computer Sciences") {
+					$school = 6;
+				}else if ($row['OrganisationDepartment'] == "Technology and Research Services") {
+					$school = 7;
+				}else if ($row['OrganisationDepartment'] == "Sch of Textiles and Design") {
+					$school = 8;
+				}else if ($row['OrganisationDepartment'] == "Other") {
+					$school = 9;
+				}
+				
+				$roundedAvgMonthlyFunding = round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
 				for ($i = 1; $i <= $numMonthAfterBeginDate; $i++) {
-					//$outputString[$index] .= "\t0";
+					//$outputArray[$index][$school] .= "\t0";
 					$index++;
 				}
 				for ($i = 1; $i <= $numMonth; $i++) {
-					//$outputString[$index] .= "\t".round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
-					$outputString[$index][1] += round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
-					$totalAvgMonthlyFunding[$index] += round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
+					//$outputArray[$index] .= "\t".round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
+					$outputArray[$index][$school] += $roundedAvgMonthlyFunding;
+					$totalAvgMonthlyFunding[$index] += $roundedAvgMonthlyFunding;
 					$index++;
 				}
 				for ($i = 1; $i <= $numMonthBeforeLastDate; $i++) {
-					//$outputString[$index] .= "\t0";
+					//$outputArray[$index] .= "\t0";
 					$index++;
 				}
 			}
 			
 			for ($i = 0; $i <= $totalNumMonth; $i++) {
-				$print_func($outputString[$i][0]."\t".$outputString[$i][1]."\n");
+				$print_func($outputArray[$i][0]);
+				for ($j = 1; $j <= 9; $j++) {
+					$print_func("\t".$outputArray[$i][$j]);
+				}
+				$print_func("\n");
 			}
-			
+
 			$highestFundingOfOneMonth = max($totalAvgMonthlyFunding);
 			$digit = strlen(round($highestFundingOfOneMonth, 0, PHP_ROUND_HALF_DOWN));
 			$res = "1";
@@ -124,6 +154,7 @@
 			for ($i = 1; $i <= $digit; $i++){
 				$res = $res."0";
 			}
+
 			$_SESSION['MonthlyFunding'] = $res;
 		}
 	}
@@ -134,51 +165,3 @@ $main(function($output) use ($f) {
     //echo $output;
 });
 fclose($f);
-
-/*
-		header("Content-Disposition: attachment; filename=\"monthlyfunding.tsv\"");
-		header("Content-Type: text/tab-delimited-values");
-	
-		echo "date\tmontlyfunding\n";
-		
-		
-		while ($row = mysql_fetch_assoc($result))
-		{
-			$granttitle = $row['GrantTitle'];
-			$totalgrantvalue = $row['TotalGrantValue'];
-			$startdate = $row['StartDate'];
-			$enddate = $row['EndDate'];
-			
-			$date1 = DateTime::createFromFormat("Y-m-d H:i:s", $startdate);
-			$date2 = DateTime::createFromFormat("Y-m-d H:i:s", $enddate);
-			
-			$y1 = $date1->format("Y");
-			$m1 = $date1->format("m");
-			
-			$y2 = $date2->format("Y");
-			$m2 = $date2->format("m");
-			
-			$numMonth = ($y2-$y1)*12+($m2-$m1)+1;
-			$avgMonthlyFunding = $totalgrantvalue/$numMonth;
-			
-			$y = $y1;
-			$m = $m1;
-			
-			for ($i = 1; $i <= $numMonth; $i++) {
-				printf("%s%02d\t%s\n",
-				$y,
-				$m,
-				$avgMonthlyFunding
-				);
-				
-				$m++;
-				
-				if ($m > 12) {
-					$y++;
-					$m = 1;
-				}
-			}
-            
-   
-		}
-		*/

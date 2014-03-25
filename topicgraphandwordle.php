@@ -111,6 +111,7 @@ body {
   }
 </script>
 <script>
+
 var margin = {top: 40, right: 40, bottom: 100, left: 70},
     width = 960 - margin.left - margin.right,
     height = 350 - margin.top - margin.bottom;
@@ -124,7 +125,7 @@ var y = d3.scale.linear()
     .range([height, 0]);
 
 var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#efc050", "#d0417e", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
 
 var xAxis = d3.svg.axis()
     .scale(x0)
@@ -165,7 +166,7 @@ d3.csv("spendpertopicperschool.csv", function(error, data) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Total Spend");
+      .text("Total Spend (Pound)");
 
   var state = svg.selectAll(".state")
       .data(data)
@@ -204,8 +205,98 @@ d3.csv("spendpertopicperschool.csv", function(error, data) {
 });
 
 </script>
-<?php
-	include_once("show.php");
+<?php 
+include("createsvg.php");
 ?>
+<script>
+(function () {
+var margin = {top: 40, right: 40, bottom: 100, left: 70},
+    width = 960 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y%m").parse;
+
+var alternatingColorScale = function () {
+var domain, range;
+
+function scale(x) { return range[domain.indexOf(x)%10]; }
+scale.domain = function(x) {
+if(!arguments.length) return domain; domain = x; return scale; }
+scale.range = function(x) {
+if(!arguments.length) return range; range = x; return scale; }
+return scale; }
+var color = alternatingColorScale().range(["#efc050", "#d0417e", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
+
+d3.tsv("monthlyfunding.tsv", function(error, data) {
+var names = d3.keys(data[0]).filter(function(key) { return key !== "date"; });
+color.domain(names);
+
+data.forEach(function(d) {
+d.date = parseDate(d.date); });
+
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]).domain([0, <?php echo $_SESSION['MonthlyFunding']; ?>]);
+
+var xAxis = d3.svg.axis().scale(x).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).orient("left");
+
+var area = d3.svg.area().x(function(d) { return x(d.date); })
+.y0(function(d) { return y(d.y0); })
+.y1(function(d) { return y(d.y0 + d.y); });
+
+var stack = d3.layout.stack().values(function(d) { return d.values; });
+
+var svg = d3.select("body").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var browsers = stack(color.domain().map(function(name) {
+return { name: name, values: data.map(function(d) {
+return { date: d.date, y: d[name] / 1}; }) };
+}));
+
+x.domain(d3.extent(data, function(d) { return d.date; }));
+
+var browser = svg.selectAll(".browser").data(browsers)
+.enter().append("g").attr("class", "browser");
+
+browser.append("path").attr("class", "area")
+.attr("d", function(d) { return area(d.values); })
+.style("fill", function(d) { return color(d.name); });
+
+svg.append("g").attr("class", "x axis")
+.attr("transform", "translate(0," + height + ")").call(xAxis);
+
+svg.append("g").attr("class", "y axis").call(yAxis)
+.append("text")
+.attr("transform", "rotate(-90)")
+.attr("y", 6)
+.attr("dy", ".71em")
+.style("text-anchor", "end")
+.text("Monthly Funding (Pound)");
+	  
+  var legend = svg.selectAll(".legend")
+      .data(names.slice())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+});
+}());
+</script>
 </body>
 </html>
