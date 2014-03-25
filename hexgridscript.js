@@ -92,7 +92,7 @@ var hexY;
 var urlRef;
 var topicWords;
 
-centers.forEach(function(center, i) {
+data.forEach(function(d, i) {
   counter = i;
   urlRef = data[i].url;
   hexX = (data[i].hexX)*(hexRadius*1.75);
