@@ -1,3 +1,12 @@
+/* Design and Code Project 2014
+   Authors: Lewis Deacon, Laura McCormack and Tom Townsend
+   JavaScript file to generate Hexgrid with Topic wordles (orignal file - HexGrid.js)
+   Revision History
+   Initial Creation - Lewis
+   Refactored to enable multiple wordles and moved to this file - Tom
+   Fixed so wordles were placed correctly in the hexagons - Laura
+*/
+
 var data = [
 {topicID: "1",  words: ["health","intervention","evidence","decision","behaviour"], url: "topicgraphandwordle.php?topicID=1", hexX: 0, hexY: 0, hexNumber: 1, school: ""},
 {topicID: "2",  words: ["policy","political","public","law","government"], url: "topicgraphandwordle.php?topicID=2", hexX: 0, hexY: 0, hexNumber: 2, school: ""},
