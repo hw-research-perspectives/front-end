@@ -119,7 +119,7 @@ data.forEach(function(d, i) {
     d3.layout.cloud().size([75, 75])
     .words(
       data[i].words.map(function(d) {
-     return {text: d, size: 10};
+     return {text: d, size: 12};
     }))
     .padding(0.5)
     .rotate(0)
