@@ -80,6 +80,8 @@ foreach(explode("\n", $file) as $line)
             $t = 0;
             foreach(explode(" ", $cell) as $topic)
             {
+                if( $topic == "" ) continue;
+                
                 $topics[] = new topic($topic, $x, $y, $t);
                 $t++;
             }
