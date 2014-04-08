@@ -38,7 +38,7 @@ class topic
         $this->hexX = $x;
         $this->hexY = $y;
         $this->hexNumber = $t;
-        $this->url = "topicgraphandwordle.php?topicID=" . $topic;
+        $this->url = "display.php?topicID=" . $topic;
         $this->school = $data['OrganisationDepartment']; // FIXME
     }
 }

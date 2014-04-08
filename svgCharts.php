@@ -3,16 +3,21 @@ $topicID = 0;
 if (isset($_GET['topicID'])) {
 	$topicID = $_GET['topicID'];
 }
-if (session_status() == PHP_SESSION_NONE) {
-	session_start();
-}
+
+require_once('config.inc.php');
+$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
+$wordleQuery = $db->prepare('SELECT TopicLabel FROM topics_100 where topicID = :topicID;');
+$wordleQuery->execute(array(':topicID' => $topicID));
+$words = $wordleQuery->fetchColumn();
+$wordleQuery->closeCursor();
+
 ?>
 <script>
 (function () {
   var fill = d3.scale.category20();
 
   d3.layout.cloud().size([960, 350])
-      .words([<?php  echo file_get_contents("http://127.0.0.1/front-end/svgData.php?query=wordle&format=csvfm&topicID=$topicID"); ?>].map(function(d) {
+      .words([<?php echo '"' . str_replace(' ', '","', trim($words)) . '"' ?>].map(function(d) {
         return {text: d, size: 34 + Math.random() * 20};
      //return {text: d, size: 40};
       }))
@@ -74,7 +79,7 @@ var svg = d3.select("#total_spend_chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.tsv("http://127.0.0.1/front-end/svgData.php?query=totalSpend&format=tsvfm&topicID=<?php echo $topicID;?>", function(error, data) {
+d3.tsv("svgData.php?query=totalSpend&format=tsv&topicID=<?php echo $topicID;?>", function(error, data) {
   var ageNames = d3.keys(data[0]).filter(function(key) { return key !== "TopicId"; });
 
   data.forEach(function(d) {
@@ -155,7 +160,7 @@ if(!arguments.length) return range; range = x; return scale; }
 return scale; }
 var color = alternatingColorScale().range(["#efc050", "#d0417e", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
 
-d3.tsv("http://127.0.0.1/front-end/svgData.php?query=monthlySpend&format=tsv&topicID=<?php echo $topicID;?>", function(error, data) {
+d3.tsv("svgData.php?query=monthlySpend&format=tsv&topicID=<?php echo $topicID;?>", function(error, data) {
 var names = d3.keys(data[0]).filter(function(key) { return key !== "date"; });
 color.domain(names);
 

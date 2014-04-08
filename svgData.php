@@ -20,8 +20,6 @@ require_once("config.inc.php");
 $queryVariables = array("debug", "wordle", "totalSpend", "monthlySpend");
 
 $debug = "SELECT 'sekrit' AS secretSitePassword FROM dual;"; // little easter egg... since http://is.gd/9HluJs got reverted :(
-//$wordle = "SELECT TopicWord FROM topicwords_100 where topicID = :topicID;";
-$wordle = "SELECT TopicLabel FROM topics_100 where topicID = :topicID;";
 $totalSpend = "SELECT TopicID, sum(LifeSciences), sum(EngineeringAndPhysical), sum(BuiltEnvironment), sum(ManagementAndLanguages), sum(Petroleum), sum(Macs), sum(TechRes), sum(Textiles), sum(Other) FROM vw_hw_totalspendbyschool where TopicID = :topicID;";
 $monthlySpend = "SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, OrganisationDepartment, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
 $monthlySpend2 = "SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID;";
@@ -219,33 +217,11 @@ if($dataFormat == "tsv" || $dataFormat == "tsvfm")
 			}
 			echo "\r\n";
 		}
-		/* $highestFundingOfOneMonth = max($totalAvgMonthlyFunding);
-		$digit = strlen(round($highestFundingOfOneMonth, 0, PHP_ROUND_HALF_DOWN));
-		$res = "1";
-		$firstNum = substr($highestFundingOfOneMonth, 0, 1);
-		if ($firstNum <= 8) {
-			$res = ++$firstNum;
-			$digit--;
-		}
-		for ($i = 1; $i <= $digit; $i++){
-			$res = $res."0";
-		}
-		if (session_status() == PHP_SESSION_NONE)
-			session_start();
-		$_SESSION['MonthlyFunding'] = $res; */
 	}
 }
 elseif($dataFormat == "csv" || $dataFormat == "csvfm")
 {
 	$data = $query->fetchAll(PDO::FETCH_ASSOC);
-	
-	if ($queryToUse == "wordle") {
-		$row = $data[0];
-		
-		$topicWords = str_replace(" ", "\",\"", trim($row['TopicLabel']));
-		$topicWords = "\"" . $topicWords . "\"\r\n";
-		echo $topicWords;
-	}
 }
 
 if($dataFormat == "debug")
