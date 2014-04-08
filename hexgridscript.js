@@ -6,8 +6,8 @@
    Refactored to enable multiple wordles and moved to this file - Tom
    Fixed so wordles were placed correctly in the hexagons - Laura
    Removed data from file, will be loaded before use - Simon
+   Add colours to wordles based on School - Laura
 */
-
 
 ///////////////////////////////////////////////////////////////////////////
 ////////////// Initiate SVG and create hexagon centers ////////////////////
@@ -90,6 +90,7 @@ var hexX;
 var hexY;
 var urlRef;
 var topicWords;
+var wordleColour;
 
 data.forEach(function(d, i) {
   counter = i;
@@ -112,13 +113,15 @@ data.forEach(function(d, i) {
 
   topicWords = data[i].words;
 
+  wordleColour = fill(data[i].school);
+
   // define the wordles
     d3.layout.cloud().size([75, 75])
     .words(
       data[i].words.map(function(d) {
-     return {text: d, size: 11};
+     return {text: d, size: 10};
     }))
-    .padding(1)
+    .padding(0.5)
     .rotate(0)
     .font("Helvetica")
     .fontSize(function(d) { return d.size; })
@@ -138,9 +141,39 @@ function drawWordle(words){
       .enter().append("text")
         .style("font-size", function(d) { return d.size + "px"; })
         .style("font-family", "Helvetica")
+	.attr("fill", wordleColour)
         .attr("text-anchor", "middle")
         .attr("transform", function(d) {
           return "translate(" + [d.x,d.y] + ")";
         })
        .text(function(d) { return d.text; });
+}
+
+function fill(d) {
+  //"#efc050", "#d0417e", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"
+  if (d == "Sch of Life Sciences"){
+	return "#efc050";
+  } 
+  if (d == "Sch of Engineering and Physical Science"){
+	return "#d0417e";
+  } 
+  if (d == "Sch of the Built Environment"){
+	return "#00947e";
+  } 
+  if (d == "Sch of Management and Languages"){
+	return "#0c1e3c";
+  } 
+  if (d == "Institute Of Petroleum Engineering"){
+	return "#766a62";
+  } 
+  if (d == "S of Mathematical and Computer Sciences"){
+	return "#dc241f";
+  } 
+  if (d == "Technology and Research Services"){
+	return "#7fcdcd";
+  } 
+  if (d == "Sch of Textiles and Design"){
+	return "#FF9900";
+  } 
+  return "#99FF00";
 }
