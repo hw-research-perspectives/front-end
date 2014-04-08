@@ -33,7 +33,7 @@ class topic
         $data = $topicStatement->fetch(PDO::FETCH_ASSOC);
         $topicStatement->closeCursor(); // IMPORTANT! Without closing the refcursor you won't free up resources or the pointer to be reused for the next execution.
         
-        $this->words = explode(" ", trim($data['TopicLabel']));
+        $this->words = array_slice(explode(" ", trim($data['TopicLabel'])),0,5);
         $this->topicId = $topic;
         $this->hexX = $x;
         $this->hexY = $y;
@@ -77,9 +77,9 @@ foreach(explode("\n", $file) as $line)
     {
         if($cell != "[]")
         {
-            $t = 0;
+            $t = 1;
             foreach(explode(" ", $cell) as $topic)
-            {
+            {               
                 if( $topic == "" ) continue;
                 
                 $topics[] = new topic($topic, $x, $y, $t);
