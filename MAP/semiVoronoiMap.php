@@ -170,9 +170,9 @@ if ($header_source != '') {
 
 
 <section class="grey">
-    <div class="content">
-       
-    </div>
+	<div style="padding:33px 0px;" class="content">
+		<h1>Topic <?php echo $_GET['topicID']; ?></h1>
+	</div>
 </section>
 
 <section class="white">
