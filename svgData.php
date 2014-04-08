@@ -113,8 +113,8 @@ if($dataFormat == "tsv" || $dataFormat == "tsvfm")
 		$beginDate = $row2['min(StartDate)'];
 		$lastDate = $row2['max(EndDate)'];
 			
-		$date1 = DateTime::createFromFormat("Y-m-d H:i:s", $beginDate);
-		$date2 = DateTime::createFromFormat("Y-m-d H:i:s", $lastDate);
+		$date1 = date_create($beginDate);
+		$date2 = date_create($lastDate);
 				
 		$y1 = $date1->format("Y");
 		$m1 = $date1->format("m");
@@ -157,8 +157,8 @@ if($dataFormat == "tsv" || $dataFormat == "tsvfm")
 			$startdate = $row['StartDate'];
 			$enddate = $row['EndDate'];
 				
-			$date3 = DateTime::createFromFormat("Y-m-d H:i:s", $startdate);
-			$date4 = DateTime::createFromFormat("Y-m-d H:i:s", $enddate);
+			$date3 = date_create($startdate);
+			$date4 = date_create($enddate);
 				
 			$y3 = $date3->format("Y");
 			$m3 = $date3->format("m");
@@ -197,7 +197,7 @@ if($dataFormat == "tsv" || $dataFormat == "tsvfm")
 				$school = 9;
 			}
 				
-			$roundedAvgMonthlyFunding = round($avgMonthlyFunding, 1, PHP_ROUND_HALF_UP);
+			$roundedAvgMonthlyFunding = round($avgMonthlyFunding, 1);
 			for ($i = 1; $i <= $numMonthAfterBeginDate; $i++) {
 				$index++;
 			}
