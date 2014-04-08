@@ -110,6 +110,30 @@ body {
 		</p>
 	</div>
 </section>
+<section class="grey">
+    <div style="padding-bottom:33px 0px;" class="content">
+        <table>
+            <thead>
+                <tr><th>Grant Ref Number</th><th>Grant Title</th><th>Department</th></tr>
+            </thead>
+            <tbody>
+<?php
+  require_once("config.inc.php");
+  $db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
+  $grantsQuery = $db->prepare("SELECT GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID WHERE topicId = :topicID;");
+  $grantsQuery->execute(array(":topicID" => $topicID));
+  
+  foreach ($grantsQuery->fetchAll(PDO::FETCH_ASSOC) as $row)
+  {
+    echo '<tr><td>' . $row['GrantRefNumber'] . '</td><td>' . $row['GrantTitle']  .'</td><td>' . $row['OrganisationDepartment'] . '</td></tr>';
+  }
+  
+?>
+            </tbody>
+        </table>
+        </div>
+</section>
+
 <?php require_once("svgCharts.php"); ?>
 <!-- footer -->
 <div class="footer">
