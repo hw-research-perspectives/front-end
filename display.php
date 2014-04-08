@@ -48,7 +48,7 @@ body {
                                                                            style="height:54px; padding-left:220px; padding-top:40px;"
                                                                            src="http://researchperspectives.org/epsrc.svg"/></a>
 </header>
-<!--<div style="width:100%; height:40px; background-color:#00947E">
+<div style="width:100%; height:40px; background-color:#00947E">
     <nav>
         <ul>
             <li <?php if ($header_opt == 'home') echo 'style="background-color:#68003F"'; ?>><a
@@ -63,24 +63,6 @@ body {
                     href="http://www.researchperspectives.org/blog/">Development Blog</a></li>
             <li <?php if ($header_opt == 'contact') echo 'style="background-color:#68003F"'; ?>><a
                     href="http://www.researchperspectives.org/contact/">Contact Us</a></li>
-        </ul>
-    </nav>
-</div>-->
-<div style="width:100%; height:40px; background-color:#00947E">
-    <nav>
-        <ul>
-            <li <?php if ($header_opt == 'home') echo 'style="background-color:#68003F"'; ?>><a
-                    href="">Home</a></li>
-            <li <?php if ($header_opt == 'tools') echo 'style="background-color:#68003F"'; ?>><a
-                    href="">Research Tools</a></li>
-            <li <?php if ($header_opt == 'meetings') echo 'style="background-color:#68003F"'; ?>><a
-                    href="">Project Meetings</a></li>
-            <li <?php if ($header_opt == 'about') echo 'style="background-color:#68003F"'; ?>><a
-                    href="">About Perspectives</a></li>
-            <li <?php if ($header_opt == 'blog') echo 'style="background-color:#68003F"'; ?>><a
-                    href="">Development Blog</a></li>
-            <li <?php if ($header_opt == 'contact') echo 'style="background-color:#68003F"'; ?>><a
-                    href="">Contact Us</a></li>
         </ul>
     </nav>
 </div>
