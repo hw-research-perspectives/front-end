@@ -5,20 +5,10 @@
    Initial Creation - Lewis
    Refactored to enable multiple wordles and moved to this file - Tom
    Fixed so wordles were placed correctly in the hexagons - Laura
+   Removed data from file, will be loaded before use - Simon
 */
 
-var data = [
-{topicID: "1",  words: ["health","intervention","evidence","decision","behaviour"], url: "topicgraphandwordle.php?topicID=1", hexX: 0, hexY: 0, hexNumber: 1, school: ""},
-{topicID: "2",  words: ["policy","political","public","law","government"], url: "topicgraphandwordle.php?topicID=2", hexX: 0, hexY: 0, hexNumber: 2, school: ""},
-{topicID: "3",  words: ["species","population","habitat","fish","community"], url: "topicgraphandwordle.php?topicID=3", hexX: 0, hexY: 0, hexNumber: 3, school: ""},
-{topicID: "4",  words: ["personal","detail","sensitive","submission","gtr"], url: "topicgraphandwordle.php?topicID=4", hexX: 1, hexY: 0, hexNumber: 1, school: ""},
-{topicID: "5",  words: ["universe","dark","energy","matter","gravitational"], url: "topicgraphandwordle.php?topicID=5", hexX: 1, hexY: 0, hexNumber: 2, school: ""},
-{topicID: "6",  words: ["cell","stem","tissue","bone","human"], url: "topicgraphandwordle.php?topicID=6", hexX: 0, hexY: 1, hexNumber: 1, school: ""},
-{topicID: "7",  words: ["protein","structure","molecule","enzyme","biological"], url: "topicgraphandwordle.php?topicID=7", hexX: 0, hexY: 2, hexNumber: 1, school: ""},
-{topicID: "8",  words: ["public","summary","await","request","receive"], url: "topicgraphandwordle.php?topicID=8", hexX: 0, hexY: 3, hexNumber: 1, school: ""},
-{topicID: "9",  words: ["gene","genetic","genome","sequence","species"], url: "topicgraphandwordle.php?topicID=9", hexX: 0, hexY: 4, hexNumber: 1, school: ""},
-{topicID: "10", words: ["muscle","oxygen","stress","mitochondrial","damage"], url: "topicgraphandwordle.php?topicID=10", hexX: 1, hexY: 1, hexNumber: 1, school: ""}
-];
+
 ///////////////////////////////////////////////////////////////////////////
 ////////////// Initiate SVG and create hexagon centers ////////////////////
 ///////////////////////////////////////////////////////////////////////////
