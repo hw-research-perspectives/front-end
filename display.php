@@ -93,6 +93,13 @@ body {
 	</div>
 </section>
 <section class="grey">
+	<div style="padding-bottom:33px 0px;" class="content">
+        <h2>Topic Contribution Map</h2>
+		<a href="MAP/semiVoronoiMap.php?topicID=<?php echo $topicID; ?>">Link to Topic Contribution Map for Topic <?php echo $topicID; ?></a>
+	</div>
+</section>
+
+<section class="white">
     <div style="padding-bottom:33px 0px;" class="content">
         <table>
             <thead>
