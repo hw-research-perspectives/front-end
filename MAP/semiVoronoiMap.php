@@ -132,7 +132,8 @@ text {
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/queue.v1.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
-	<script type="text/javascript" src="D3/d3.layout.cloud.js"></script>
+	<script type="text/javascript" src="jquery.tipsy.js"></script>
+    <link href="tipsy.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -208,8 +209,9 @@ if ($header_source != '') {
 
 <section class="grey">
     <div class="content">
-      
-
+       <h2>
+      <span>Organisations Involved</span>
+    </h2>
     </div>
 </section>
 
@@ -331,7 +333,10 @@ places = topojson.feature(uk, uk.objects.places);
   grant.append("path")
       .attr("class", "grant-cell")
 	  //This length isnt correct
-      .attr("d", function(d) { return d.cell.length ? "M" + d.cell.join("L") + "Z" : null; });
+      .attr("d", function(d) { return d.cell.length ? "M" + d.cell.join("L") + "Z" : null; })
+	  .on("mouseover", function(d, i) { d3.select("h2 span").text(d.name); })
+	  .on("mouseout", function(d, i) { d3.select("h2 span").text("Organisations"); });
+	  
 
   grant.append("g")
       .attr("class", "grant-arcs")
@@ -342,8 +347,10 @@ places = topojson.feature(uk, uk.objects.places);
 
   grant.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-	  //.attr("r",7);
       .attr("r", function(d) { return d.count; });
+	  
+	
+	  
 
 }
 
