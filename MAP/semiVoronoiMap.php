@@ -109,6 +109,11 @@ text {
   display: inline;
 }
 
+.box{
+float : right;
+margin-top: 350px;
+margin-right : 300px;
+}
 
 
 
@@ -132,8 +137,6 @@ text {
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/queue.v1.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
-	<script type="text/javascript" src="jquery.tipsy.js"></script>
-    <link href="tipsy.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -209,9 +212,7 @@ if ($header_source != '') {
 
 <section class="grey">
     <div class="content">
-       <h2>
-      <span>Organisations Involved</span>
-    </h2>
+       
     </div>
 </section>
 
@@ -219,15 +220,15 @@ if ($header_source != '') {
     <div class="content">
 		<script>
 
-var width = 960,
-    height = 1160;
+var width = 850,
+    height = 1100;
 
 var projection = d3.geo.albers()
     .center([0, 55.4])
     .rotate([4.4, 0])
     .parallels([50, 60])
     .scale(1200 * 4.5)
-    .translate([600,550]);
+    .translate([450,550]);
 
 var path = d3.geo.path()
     .projection(projection)
@@ -244,8 +245,8 @@ var svg = d3.select("body").append("svg")
 
 queue()
     .defer(d3.json, "uk.json")
-    .defer(d3.csv, "areas.csv")
-    .defer(d3.csv, "grantConnections.csv")
+    .defer(d3.csv, "../data.php?query=allLocations&format=csv")
+    .defer(d3.csv, "../data.php?query=topicLocations&topicID=<?php echo $_GET['topicID']; ?>&format=csv")
     .await(ready);
 
 function ready(error, uk, universities, links) {
@@ -334,8 +335,8 @@ places = topojson.feature(uk, uk.objects.places);
       .attr("class", "grant-cell")
 	  //This length isnt correct
       .attr("d", function(d) { return d.cell.length ? "M" + d.cell.join("L") + "Z" : null; })
-	  .on("mouseover", function(d, i) { d3.select("h2 span").text(d.name); })
-	  .on("mouseout", function(d, i) { d3.select("h2 span").text("Organisations"); });
+	  .on("mouseover", function(d, i) { d3.select(".orgList").html(d.name.split(",").map(function(d){return "<li>"+d+"</li>" })); })
+	  .on("mouseout", function(d, i) { d3.select(".orgList").text(""); });
 	  
 
   grant.append("g")
@@ -353,9 +354,15 @@ places = topojson.feature(uk, uk.objects.places);
 	  
 
 }
-
-
 </script>
+</div>
+
+<div class="box">
+<h2 class="listTitle">Organisation List</h2><br/>
+<ul class="orgList">
+</ul>
+</div>
+
 </section>
 
 
