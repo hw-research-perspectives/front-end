@@ -26,7 +26,7 @@ $debug = "SELECT 'sekrit' AS secretSitePassword FROM dual;"; // little easter eg
 $hwgrants = "SELECT * FROM vw_hw_grants;";
 $allgrants = "SELECT GrantRefNumber, GrantTitle, TotalGrantValue, HoldingOrganisationName FROM information;";
 $topicLocations = "select 'A34Z' as origin, CONCAT('A',location_id2 ,'Z') as destination, 10 as count from (select OrganisationPostcode  from topicmap_grants_100 tm inner join information i on i.id = tm.id where tm.TopicID=:topicID and i.OrganisationID <> '' and i.OrganisationName LIKE '%University%' group by OrganisationPostcode order by tm.Proportion desc limit 10) pc inner join location l on pc.OrganisationPostCode = l.Postcode;";
-$allLocations = "SELECT CONCAT('A', `location`.`location_id2`, 'Z') as iata, `location`.`organisationName` as name, `location`.`Lat` as latitude, `location`.`Lon` as longitude FROM `location`;";
+$allLocations = "SELECT CONCAT('A', `location`.`location_id2`, 'Z') as iata, CONCAT('\"',`location`.`organisationName`, '\"') as name, `location`.`Lat` as latitude, `location`.`Lon` as longitude FROM `location`;";
 // END OF QUERY LIST!
 
 // default to sane value
