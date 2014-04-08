@@ -2,48 +2,7 @@
 
 error_reporting(0);
 
-require_once("config.inc.php");
-
-//Database Connection
-$connection = mysql_connect($dbhost, $dbuser, $dbpass);
-mysql_select_db($dbname, $connection);
-
-//Simple Query
-$query = 'SELECT information.GrantRefNumber, information.GrantTitle, DATE_FORMAT(information.StartDate, "%d/%m/%Y") AS StartDate, ' .
-    'DATE_FORMAT(information.EndDate, "%d/%m/%Y") AS EndDate, StartDate as StartDateRaw, EndDate AS EndDateRaw, ' .
-    'information.TotalGrantValue, information.HoldingDepartmentName, ' .
-    'information.HoldingOrganisationName, summary.Summary FROM information ' .
-    'INNER JOIN summary ON information.GrantRefNumber = summary.GrantRefNumber ' .
-    'INNER JOIN analysis ON information.GrantRefNumber = analysis.GrantRefNumber ' .
-    'LIMIT 5';
-
-$grants = array();  // Hold grants information
-
-// Get data from MYSQL
-$result = mysql_query($query) or die(mysql_error());
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    $pack = array();
-
-    $pack['GrantRefNumber'] = $row['GrantRefNumber'];
-    $pack['GrantTitle'] = $row['GrantTitle'];
-    $pack['WordCloudFile'] = 'http://www.researchperspectives.org/gow.grants/grant_' . str_replace('/', '', $grantRefNumber) . '.png';
-
-    $pack['StartDate'] = substr($row['StartDate'], strpos($row['StartDate'], "/") + 1);
-    $pack['EndDate'] = substr($row['EndDate'], strpos($row['EndDate'], "/") + 1);
-    $pack['TotalGrantValue'] = 'Â£' . number_format($row['TotalGrantValue']);
-    $pack['Link'] = 'http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=' . $row['GrantRefNumber'];
-    $pack['HoldingDepartment'] = $row['HoldingDepartmentName'];
-    $pack['HoldingOrganization'] = $row['HoldingOrganisationName'];
-
-    $pack['Summary'] = $row['Summary'];
-    $pack['StartDateRaw'] = date("c", strtotime($row['StartDateRaw']));
-    $pack['EndDateRaw'] = date("c", strtotime($row['EndDateRaw']));
-
-    array_push($grants, $pack); // Push array with all the grant information to grants array
-}
-
-MYSQL_CLOSE(); // Very Important as server can only open 20 concurrent MYSQL connections.
-
+require_once("../config.inc.php");
 
 ?><!doctype html>
 <html>
