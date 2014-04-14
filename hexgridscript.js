@@ -150,12 +150,12 @@ function drawWordle(words){
 }
 
 function fill(d) {
-  //"#efc050", "#d0417e", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"
+  //"#efc050", "#f3759f", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"
   if (d == "Sch of Life Sciences"){
 	return "#efc050";
   } 
   if (d == "Sch of Engineering and Physical Science"){
-	return "#d0417e";
+	return "#f3759f";
   } 
   if (d == "Sch of the Built Environment"){
 	return "#00947e";
