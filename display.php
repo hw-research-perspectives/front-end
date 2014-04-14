@@ -109,12 +109,12 @@ body {
 <?php
   require_once("config.inc.php");
   $db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
-  $grantsQuery = $db->prepare("SELECT GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID WHERE topicId = :topicID;");
+  $grantsQuery = $db->prepare("SELECT i.id, GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID WHERE topicId = :topicID;");
   $grantsQuery->execute(array(":topicID" => $topicID));
   
   foreach ($grantsQuery->fetchAll(PDO::FETCH_ASSOC) as $row)
   {
-    echo '<tr><td>' . $row['GrantRefNumber'] . '</td><td>' . $row['GrantTitle']  .'</td><td>' . $row['OrganisationDepartment'] . '</td></tr>';
+    echo '<tr><td>' . $row['GrantRefNumber'] . '</td><td><a href="http://gtr.rcuk.ac.uk/project/'.$row['ID'].'">' . $row['GrantTitle']  .'</a></td><td>' . $row['OrganisationDepartment'] . '</td></tr>';
   }
   
 ?>
