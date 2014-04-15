@@ -43,6 +43,8 @@ class topic
     }
 }
 
+set_time_limit(60);
+
 require_once("config.inc.php");
 
 $db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);

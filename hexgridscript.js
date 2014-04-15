@@ -14,22 +14,22 @@
 ///////////////////////////////////////////////////////////////////////////
 //svg sizes and margins
 var margin = {
-    top: 150,
-    right: 0,
+    top: 120,
+    right: 10,
     bottom: 20,
     left: 80
 };
 
 //The next lines should be run, but this seems to go wrong on the first load in bl.ocks.org
-var width = $(window).width() - margin.left - margin.right;
-var height = $(window).height() - margin.top - margin.bottom - 80;
+//var width = $(window).width() - margin.left - margin.right;
+//var height = $(window).height() - margin.top - margin.bottom - 80;
 //Fixed values 
-//var width = 850;
-//var height = 350;
+var width = 2260;
+var height = 1120;
 
 //The number of columns and rows of the grid
-var MapColumns = 8,
-    MapRows = 5;
+var MapColumns = 14,
+    MapRows = 10;
     
 //The maximum radius the hexagons can have to still fit the screen
 var hexRadius = d3.min([width/((MapColumns + 1) * Math.sqrt(3)),
@@ -95,7 +95,7 @@ var wordleColour;
 data.forEach(function(d, i) {
   counter = i;
   urlRef = data[i].url;
-  hexX = (data[i].hexX)*(hexRadius*1.75);
+  hexX = (data[i].hexX)*(hexRadius*1.72);
   hexY = (data[i].hexY)*(hexRadius*1.5);
   // if hexY is an odd number need to move across an extra hexRadius
   if (data[i].hexY%2 != 0){hexX = hexX + hexRadius}
@@ -119,7 +119,7 @@ data.forEach(function(d, i) {
     d3.layout.cloud().size([75, 75])
     .words(
       data[i].words.map(function(d) {
-     return {text: d, size: 12};
+     return {text: d, size: 11.5 + Math.random() * 1.5};
     }))
     .padding(0.5)
     .rotate(0)
@@ -150,12 +150,12 @@ function drawWordle(words){
 }
 
 function fill(d) {
-  //"#efc050", "#d0417e", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"
+  //"#efc050", "#f3759f", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"
   if (d == "Sch of Life Sciences"){
 	return "#efc050";
   } 
   if (d == "Sch of Engineering and Physical Science"){
-	return "#d0417e";
+	return "#f3759f";
   } 
   if (d == "Sch of the Built Environment"){
 	return "#00947e";

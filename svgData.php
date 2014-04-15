@@ -20,7 +20,7 @@ require_once("config.inc.php");
 $queryVariables = array("debug", "wordle", "totalSpend", "monthlySpend");
 
 $debug = "SELECT 'sekrit' AS secretSitePassword FROM dual;"; // little easter egg... since http://is.gd/9HluJs got reverted :(
-$totalSpend = "SELECT TopicID, sum(LifeSciences), sum(EngineeringAndPhysical), sum(BuiltEnvironment), sum(ManagementAndLanguages), sum(Petroleum), sum(Macs), sum(TechRes), sum(Textiles), sum(Other) FROM vw_hw_totalspendbyschool where TopicID = :topicID;";
+$totalSpend = "SELECT * FROM vw_hw_totalspendbyschool_in_single_row where TopicID = :topicID;";
 $monthlySpend = "SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, OrganisationDepartment, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
 $monthlySpend2 = "SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID;";
 
