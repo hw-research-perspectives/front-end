@@ -1,3 +1,12 @@
+<!-- Design and Code Project 2014
+    Authors: Lewis Deacon
+	This file shows links between universites contributing to a certain topic by ID
+    Initial Creation - Lewis
+    Added mouseover to view organisations with certain links - Lewis
+	Added functionality to handle single topics - Lewis & Simon
+	Tweaks / Fixes - Simon
+	Added the topic ID to the header of the page - Simon
+   -->
 <?php
 
 error_reporting(0);
