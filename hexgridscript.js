@@ -1,5 +1,5 @@
 /* Design and Code Project 2014
-   Authors: Lewis Deacon, Laura McCormack and Tom Townsend
+   Authors: Lewis Deacon, Laura McCormack, Tom Townsend and Tsz Kit Law
    JavaScript file to generate Hexgrid with Topic wordles (orignal file - HexGrid.js)
    Revision History
    Initial Creation - Lewis
@@ -7,6 +7,7 @@
    Fixed so wordles were placed correctly in the hexagons - Laura
    Removed data from file, will be loaded before use - Simon
    Add colours to wordles based on School - Laura
+   The size of hex grid svg is now fixed, minor changes to its style, minor changes to the position of the wordle - Kit
 */
 
 ///////////////////////////////////////////////////////////////////////////

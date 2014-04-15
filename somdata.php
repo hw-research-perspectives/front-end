@@ -1,10 +1,11 @@
 <?php
 /* Design and Code Project 2014
- *  Authors: Simon Walker
+ *  Authors: Simon Walker, Tsz Kit Law
  *  PHP script to load the topic data for the hex grids
  *  Revision History
  *  Initial Creation - Simon
  *  Adjusted output format to required form - Simon
+ *  Set a longer time limit - Kit
  */
 
 // helper class
