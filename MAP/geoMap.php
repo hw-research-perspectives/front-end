@@ -6,6 +6,7 @@
 	Added functionality to handle single topics - Lewis & Simon
 	Tweaks / Fixes - Simon
 	Added the topic ID to the header of the page - Simon
+	Rename - semiVornoiMap.php -> geoMap.php
    -->
 <?php
 
