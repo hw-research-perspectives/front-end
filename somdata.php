@@ -6,6 +6,7 @@
  *  Initial Creation - Simon
  *  Adjusted output format to required form - Simon
  *  Set a longer time limit - Kit
+ *  Get the Department based on the highest spend, remove splice for array - Laura
  */
 
 // helper class
@@ -30,7 +31,7 @@ class topic
     {
         global $topicStatement;
         
-        $topicStatement->execute(array(":id" => $topic)); // execute with parameters
+        $topicStatement->execute(array(":id" => $topic, ":id2" => $topic)); // execute with parameters
         $data = $topicStatement->fetch(PDO::FETCH_ASSOC);
         $topicStatement->closeCursor(); // IMPORTANT! Without closing the refcursor you won't free up resources or the pointer to be reused for the next execution.
         
@@ -65,7 +66,7 @@ $db->exec("insert into tmp_vw_hw_topics_100 SELECT *, connection_id() FROM vw_hw
 
 // prepare the statement once, execute multiple times. It's much faster that way cos you only have to send the new values to the server.
 // where clause uses the entire primary key so we can use the index, but the last condition is pointless for data filtering.
-$topicStatement = $db->prepare("SELECT TopicLabel, OrganisationDepartment FROM tmp_vw_hw_topics_100 WHERE TopicID = :id AND connection = connection_id();");
+$topicStatement = $db->prepare("SELECT t.TopicLabel, td.OrganisationDepartment FROM tmp_vw_hw_topics_100 as t INNER JOIN vw_topic_depts as td ON td.TopicId = t.topicId WHERE t.TopicID = :id AND connection = connection_id() AND td.DeptGrant = ( SELECT MAX(DeptGrant) FROM vw_topic_depts WHERE topicid = :id2 );");
 
 // read file
 $file = file_get_contents('SOM.csv');
