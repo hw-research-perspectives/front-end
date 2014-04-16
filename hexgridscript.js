@@ -8,6 +8,8 @@
    Removed data from file, will be loaded before use - Simon
    Add colours to wordles based on School - Laura
    The size of hex grid svg is now fixed, minor changes to its style, minor changes to the position of the wordle - Kit
+   Fix sizing of wordles - Tom
+   Splice array here so can have 5 words in word cloud and 10 words on hover - Laura
 */
 
 ///////////////////////////////////////////////////////////////////////////
@@ -117,12 +119,12 @@ data.forEach(function(d, i) {
   wordleColour = fill(data[i].school);
 
   // define the wordles
-    d3.layout.cloud().size([75, 75])
+    d3.layout.cloud().size([100, 75])
     .words(
-      data[i].words.map(function(d) {
-     return {text: d, size: 11.5 + Math.random() * 1.5};
+      data[i].words.slice(0,5).map(function(d) {
+     return {text: d, size: 11.5 + Math.random() * 5};
     }))
-    .padding(0.5)
+    .padding(0.25)
     .rotate(0)
     .font("Helvetica")
     .fontSize(function(d) { return d.size; })
