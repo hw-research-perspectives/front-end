@@ -1,4 +1,15 @@
 <?php
+/*	Design and Code Project 2014
+	Authors: Tsz Kit Law
+	PHP file which contains JavaScript for generating the wordle, bar and stack d3 charts.
+	Revision History
+	Initial Creation - Kit
+	added wordle and bar chart - Tom? Laura?
+	added stack chart (taken from Craig) - Kit
+	added links to retrieve charts' data from svgData.php instead of local file - Kit
+	added wordle words database query and updated to use relative links - Simon
+	modified colour for Sch of Engineering and Physical Science - Kit
+*/
 $topicID = 0;
 if (isset($_GET['topicID'])) {
 	$topicID = $_GET['topicID'];

@@ -7,6 +7,7 @@
  *  Adjusted output format to required form - Simon
  *  Set a longer time limit - Kit
  *  Get the Department based on the highest spend, remove splice for array - Laura
+ *	Added php session cache for faster data retrieval - Kit
  */
 
 // helper class
@@ -41,7 +42,7 @@ class topic
         $this->hexY = $y;
         $this->hexNumber = $t;
         $this->url = "display.php?topicID=" . $topic;
-        $this->school = $data['OrganisationDepartment']; // FIXME
+        $this->school = $data['OrganisationDepartment'];
     }
 }
 
@@ -100,6 +101,9 @@ foreach(explode("\n", $file) as $line)
 // roll back our database edits
 $db->rollBack();
 
+session_cache_limiter('private_no_expire');
+session_cache_expire(120);
+session_start();
 header('Content-Type: text/javascript');
 echo "var data = ";
 echo json_encode($topics);

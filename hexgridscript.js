@@ -10,6 +10,7 @@
    The size of hex grid svg is now fixed, minor changes to its style, minor changes to the position of the wordle - Kit
    Fix sizing of wordles - Tom
    Splice array here so can have 5 words in word cloud and 10 words on hover - Laura
+   minor changes to the visual of hex grid - Kit
 */
 
 ///////////////////////////////////////////////////////////////////////////
@@ -31,8 +32,8 @@ var width = 2260;
 var height = 1120;
 
 //The number of columns and rows of the grid
-var MapColumns = 14,
-    MapRows = 10;
+var MapColumns = 11,
+    MapRows = 9;
     
 //The maximum radius the hexagons can have to still fit the screen
 var hexRadius = d3.min([width/((MapColumns + 1) * Math.sqrt(3)),
@@ -107,10 +108,10 @@ data.forEach(function(d, i) {
   if (data[i].hexNumber == 1){
     hexY = hexY - 35;
   } else if (data[i].hexNumber == 2){
-    hexX = hexX - 30;
+    hexX = hexX - 35;
     hexY = hexY + 30;
   } else if (data[i].hexNumber == 3){
-    hexX = hexX + 30;
+    hexX = hexX + 42;
     hexY = hexY + 30;
   }
 
@@ -119,10 +120,10 @@ data.forEach(function(d, i) {
   wordleColour = fill(data[i].school);
 
   // define the wordles
-    d3.layout.cloud().size([100, 75])
+	d3.layout.cloud().size([100, 75])
     .words(
       data[i].words.slice(0,5).map(function(d) {
-     return {text: d, size: 11.5 + Math.random() * 5};
+     return {text: d, size: 11.5 + Math.random() * 3};
     }))
     .padding(0.25)
     .rotate(0)

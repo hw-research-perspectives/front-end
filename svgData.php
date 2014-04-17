@@ -1,28 +1,22 @@
 <?php
-/** README:
- *
- * Output formats: use ?format= and then one of the following:
- *    debug  - uses PHP's print_r to show the data values held
- *    tsv    - output in tab-separated values format
- *    tsvfm  - output in tsv, but show nicely in the browser
- *
- * The query to execute can be specified by the &query= parameter.
- *
- * To add new queries to this list, add a variable with the name you want to use 
- * containing the query, then add the variable name to $queryVariables.
- *
- * You should be always querying as ?query=foo&format=bar  (parameter order not significant, but both present)
- */
-
+/*   Design and Code Project 2014
+   Authors: Tsz Kit Law
+   php file to generate data for bar and stack d3 charts in the svgCharts.php. 	sample query - 'svgData.php?query=monthlySpend&format=tsv&topicID=3'
+   Revision History
+   Initial Creation (modified version of data.php from Simon) - Kit
+   Added the database queries and generate output to specified format for d3 charts - Kit
+   replace calls to functions and parameters which don't exist and remove unused code - Simon
+   Added topic filter - Kit
+*/
 require_once("config.inc.php");
 
 // QUERY LIST HERE!
 $queryVariables = array("debug", "wordle", "totalSpend", "monthlySpend");
 
 $debug = "SELECT 'sekrit' AS secretSitePassword FROM dual;"; // little easter egg... since http://is.gd/9HluJs got reverted :(
-$totalSpend = "SELECT * FROM vw_hw_totalspendbyschool_in_single_row where TopicID = :topicID;";
-$monthlySpend = "SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, OrganisationDepartment, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID order by StartDate asc;";
-$monthlySpend2 = "SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and TopicID = :topicID;";
+$totalSpend = "select TopicID, sum(LifeSciences) AS LifeSciences, sum(EngineeringAndPhysical) AS EngineeringAndPhysical, sum(BuiltEnvironment) AS BuiltEnvironment, sum(ManagementAndLanguages) AS ManagementAndLanguages, sum(Petroleum) AS Petroleum, sum(Macs) AS Macs, sum(TechRes) AS TechRes, sum(Textiles) AS Textiles, sum(Other) AS Other from vw_hw_totalspendbyschool where TopicID = :topicID";
+$monthlySpend = "SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, OrganisationDepartment, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and Proportion > 0.08 and TopicID = :topicID order by StartDate asc;";
+$monthlySpend2 = "SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and Proportion > 0.08 and TopicID = :topicID;";
 
 // END OF QUERY LIST!
 

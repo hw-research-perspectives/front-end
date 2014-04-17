@@ -1,3 +1,15 @@
+<!-- Design and Code Project 2014
+   Authors: Tsz Kit Law
+   php file to display the topic's details with headers and footers taken from Stefanos index page
+   Revision History
+   Initial Creation - Kit
+   Added d3 charts from svgCharts - Kit
+   Added topic number - Kit
+   Added grants - Simon
+   Added links to gtr for each grant - Kit
+   Added Link to Topic Contribution Map - Lewis
+   Added topic filter to grants query - Kit
+-->
 <?php 
 if (isset($_GET['topicID'])) {
 	$topicID = $_GET['topicID'];
@@ -109,7 +121,7 @@ body {
 <?php
   require_once("config.inc.php");
   $db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
-  $grantsQuery = $db->prepare("SELECT i.id, GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID WHERE topicId = :topicID;");
+  $grantsQuery = $db->prepare("SELECT i.id, GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID and Proportion > 0.08 WHERE topicId = :topicID;");
   $grantsQuery->execute(array(":topicID" => $topicID));
   
   foreach ($grantsQuery->fetchAll(PDO::FETCH_ASSOC) as $row)
