@@ -16,7 +16,7 @@ $queryVariables = array("debug", "wordle", "totalSpend", "monthlySpend");
 $debug = "SELECT 'sekrit' AS secretSitePassword FROM dual;"; // little easter egg... since http://is.gd/9HluJs got reverted :(
 $totalSpend = "select TopicID, sum(LifeSciences) AS LifeSciences, sum(EngineeringAndPhysical) AS EngineeringAndPhysical, sum(BuiltEnvironment) AS BuiltEnvironment, sum(ManagementAndLanguages) AS ManagementAndLanguages, sum(Petroleum) AS Petroleum, sum(Macs) AS Macs, sum(TechRes) AS TechRes, sum(Textiles) AS Textiles, sum(Other) AS Other from vw_hw_totalspendbyschool where TopicID = :topicID";
 $monthlySpend = "SELECT vw_hw_grants.ID, TotalGrantValue, StartDate, EndDate, OrganisationDepartment, TopicID FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and Proportion > 0.04 and TopicID = :topicID order by StartDate asc;";
-$monthlySpend2 = "SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and Proportion > 0.08 and TopicID = :topicID;";
+$monthlySpend2 = "SELECT min(StartDate), max(EndDate) FROM vw_hw_grants, topicmap_grants_100 where topicmap_grants_100.ID = vw_hw_grants.ID and Proportion > 0.04 and TopicID = :topicID;";
 
 // END OF QUERY LIST!
 
