@@ -9,6 +9,7 @@
 	added stack chart (adapted from Craigs) - Kit
 	added links to retrieve charts' data from svgData.php instead of local file - Kit
 	added wordle words database query and updated to use relative links - Simon
+	modified the stack charts code to get the range of the Y-axis from the loaded TSV data - Kit
 	modified colour for Sch of Engineering and Physical Science - Kit
 */
 $topicID = 0;
