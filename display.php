@@ -9,6 +9,7 @@
    Added links to gtr for each grant - Kit
    Added Link to Topic Contribution Map - Lewis
    Added topic filter to grants query - Kit
+   Fix alignment for Map links - Tom
 -->
 <?php 
 if (isset($_GET['topicID'])) {
@@ -105,7 +106,7 @@ body {
 	</div>
 </section>
 <section class="grey">
-	<div style="padding-bottom:33px 0px;" class="content">
+	<div style="padding-bottom:33px 0px; text-align:center;" class="content">
         <h2>Topic Contribution Map</h2>
 		<a href="MAP/geoMap.php?topicID=<?php echo $topicID; ?>">Link to Topic Contribution Map for Topic <?php echo $topicID; ?></a>
 	</div>
