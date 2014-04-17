@@ -121,7 +121,7 @@ body {
 <?php
   require_once("config.inc.php");
   $db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
-  $grantsQuery = $db->prepare("SELECT i.id, GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID and Proportion > 0.08 WHERE topicId = :topicID;");
+  $grantsQuery = $db->prepare("SELECT i.id, GrantRefNumber, GrantTitle, OrganisationDepartment FROM vw_hw_grants i INNER JOIN topicmap_grants_100 t on i.ID = t.ID and Proportion > 0.04 WHERE topicId = :topicID;");
   $grantsQuery->execute(array(":topicID" => $topicID));
   
   foreach ($grantsQuery->fetchAll(PDO::FETCH_ASSOC) as $row)
