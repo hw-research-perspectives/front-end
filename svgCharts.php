@@ -73,7 +73,7 @@ var y = d3.scale.linear()
     .range([height, 0]);
 
 var color = d3.scale.ordinal()
-    .range(["#efc050", "#f3759f", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
+    .range(["#efc050", "#A76BCE", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
 
 var xAxis = d3.svg.axis()
     .scale(x0)
@@ -169,7 +169,7 @@ if(!arguments.length) return domain; domain = x; return scale; }
 scale.range = function(x) {
 if(!arguments.length) return range; range = x; return scale; }
 return scale; }
-var color = alternatingColorScale().range(["#efc050", "#f3759f", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
+var color = alternatingColorScale().range(["#efc050", "#A76BCE", "#00947e", "#0c1e3c", "#766a62", "#dc241f", "#7fcdcd" , "#FF9900", "#99FF00", "#990033"]);
 
 d3.tsv("svgData.php?query=monthlySpend&format=tsv&topicID=<?php echo $topicID;?>", function(error, data) {
 var names = d3.keys(data[0]).filter(function(key) { return key !== "date"; });

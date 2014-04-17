@@ -159,7 +159,7 @@ function fill(d) {
 	return "#efc050";
   } 
   if (d == "Sch of Engineering and Physical Science"){
-	return "#f3759f";
+	return "#A76BCE";
   } 
   if (d == "Sch of the Built Environment"){
 	return "#00947e";
