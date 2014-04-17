@@ -1,4 +1,19 @@
 <?php
+
+/* Design and Code Project 2014
+ *  Authors: Tsz Chun Law
+ *  PHP script to accept the csv file from “choose_csv_file.php”, reconstruct and update data for new grants.
+ *  Revision History
+ *  Initial Creation - Tsz Chun
+ *  Set up database connection - Tsz Chun
+ *  Fixed some parsing for query one - Tsz Chun
+ *  Mallet function implemented - Tsz Chun
+ *  Query one completed - Tsz Chun
+ *  Query two completed - Tsz Chun
+ *  Made some changes to the echoes and display the results a little tidier - Tsz Chun
+ *  More error handling - Tsz Chun
+ */
+ 
 $mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv','application/octet-stream');
 $inputCSV = '..\files\input.csv';
 $outputTXT = '..\files\id_summary.txt';
@@ -33,6 +48,7 @@ if( $_FILES['file']['name'] != "" )
 					// Connect to server and select databse.
 					$db = new PDO("mysql:host=$dbhost;dbname=$dbname;", $dbuser, $dbpass);
 					
+					// Setting up the query to update the information table for new grants
 					$queryToUse="INSERT INTO information VALUES (:data0,:data1,:data2,:data3,:data4,:data5,:data6,:data7,:data8,:data9,:data10,:data11,:data12,:data13)";
 					
 					$query = $db->prepare($queryToUse);
@@ -85,6 +101,7 @@ if( $_FILES['file']['name'] != "" )
 							echo $grantID[$row] . " " . $data[$c+1] . " " . $data[$c] . " ";
 							$c1 = $c + 1;
 							
+							// Setting up the query to update the topicmap_grants_100 table for new grants
 							$queryToUse="INSERT INTO topicmap_grants_100 VALUES (:grantID, :datac1, :datac)";
 							$query = $db->prepare($queryToUse);
 							$query->bindValue(":grantID", $grantID[$row]);
@@ -115,12 +132,14 @@ function runMallet() {
 	ini_set('max_execution_time', 0);
 	exec('cmd.exe /c ..\mallet-2.0.7\bin\mallet import-file --input ..\files\id_summary.txt --output ..\files\instanceList.mallet --use-pipe-from ..\files\reference\instances_100.ser 2>&1', $output_import);
 
+	// Output for debugging
 	// foreach($output_import as $child) {
 		// echo $child . "<br />";
 	// }
 	
 	exec('cmd.exe /c ..\mallet-2.0.7\bin\mallet infer-topics --input ..\files\instanceList.mallet --inferencer ..\files\reference\model_100_inferencer.mallet --output-doc-topics ..\files\new_topicmap.txt --num-iterations 100 --doc-topics-max 10 --doc-topics-threshold 0.1 2>&1', $output_infer);
 	
+	// Output for debugging
 	// foreach($output_infer as $child) {
 		// echo $child . "<br />";
 	// }
