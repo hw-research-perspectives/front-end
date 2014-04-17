@@ -1,7 +1,7 @@
 <?php
 /* Design and Code Project 2014
  *  Authors: Simon Walker, Tsz Kit Law
- *  PHP script to load the topic data for the hex grids
+ *  This PHP file loads the topic data from SOM.csv and generate output in Json format for the hex grids
  *  Revision History
  *  Initial Creation - Simon
  *  Adjusted output format to required form - Simon
